@@ -155,6 +155,24 @@ Complete documentation map for NanoUI framework.
 - Categorized by topic
 - Code examples included
 
+### docs/ESP8266_COMPATIBILITY.md
+**Purpose:** ESP8266 compatibility guide
+**Audience:** ESP8266 users
+**Content:**
+- Hardware comparison (ESP32 vs ESP8266)
+- Memory requirements and limitations
+- Optimized code examples
+- Best practices for ESP8266
+- Troubleshooting ESP8266 issues
+- Performance benchmarks
+
+**Topics Covered:**
+- ✅ RAM optimization strategies
+- ✅ StaticJsonDocument usage
+- ✅ Template recommendations
+- ✅ PlatformIO configuration
+- ✅ Memory monitoring
+
 ---
 
 ## 💻 Examples
@@ -281,9 +299,10 @@ Complete documentation map for NanoUI framework.
 | Core | 3 | ~2,500 | 20+ |
 | Guides | 4 | ~8,000 | 100+ |
 | API/Reference | 3 | ~6,000 | 150+ |
+| Support & FAQ | 2 | ~4,000 | 60+ |
 | Examples | 2 | ~3,000 | 40+ |
 | Tests | 3 | ~1,500 | 30+ |
-| **Total** | **15** | **~21,000** | **340+** |
+| **Total** | **17** | **~25,000** | **400+** |
 
 ---
 
