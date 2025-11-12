@@ -4,12 +4,13 @@ A lightweight, modern UI framework designed specifically for microcontrollers li
 
 ## ✨ Features
 
-- **Ultra Lightweight**: < 10KB gzipped (CSS + JS combined)
+- **Ultra Lightweight**: ~7KB gzipped (basic) / ~8KB (dashboard with charts)
 - **Modern Design**: Clean, responsive components with dark/light themes
 - **Zero Dependencies**: Pure vanilla JavaScript
 - **ESP32 Optimized**: Designed for constrained memory environments
 - **Easy Integration**: Single HTML file deployment
 - **Mobile Responsive**: Works perfectly on all screen sizes
+- **Data Visualization**: Built-in charts, gauges, and tables
 
 ## 🎯 Why NanoUI?
 
@@ -17,7 +18,7 @@ ESP32 and similar microcontrollers have limited memory (typically 520KB RAM, 4MB
 
 ## 📦 What's Included
 
-### Components
+### UI Components
 - **Buttons**: Primary, secondary, success, danger, ghost variants
 - **Cards**: Container components with headers and actions
 - **Inputs**: Text, number, password with labels
@@ -26,12 +27,28 @@ ESP32 and similar microcontrollers have limited memory (typically 520KB RAM, 4MB
 - **Badges**: Status indicators and labels
 - **Alerts**: Info, success, warning, error messages
 - **Grid System**: Responsive layout system
+- **Tables**: Responsive tables with sorting capabilities
+- **Progress Bars**: Animated progress indicators
+- **Stat Cards**: Metric display with change indicators
+- **Timeline**: Activity log component
+- **Data Lists**: Key-value formatted lists
 
-### Utilities
-- **Theme Toggle**: Dark/light mode switcher
-- **API Helper**: Easy AJAX calls to ESP32 endpoints
+### Data Visualization
+- **Line Charts**: SVG-based line charts with fill option
+- **Bar Charts**: Vertical bar charts with labels
+- **Sparklines**: Inline mini charts for quick metrics
+- **Circular Gauges**: Percentage visualizations
+- **Progress Indicators**: Multiple styles and animations
+
+### JavaScript Utilities
+- **Theme Management**: Dark/light mode with persistence
+- **API Helper**: AJAX calls with built-in error handling
 - **Auto-refresh**: Periodic data updates
-- **Loading States**: Built-in loading indicators
+- **WebSocket**: Real-time communication support
+- **Format Helpers**: Numbers, bytes, time, uptime formatters
+- **Chart API**: Easy data visualization
+- **Table API**: Dynamic table creation and sorting
+- **Gauge API**: Circular progress indicators
 
 ## 🚀 Quick Start
 
@@ -67,26 +84,42 @@ void setup() {
 # Install dependencies
 npm install
 
-# Build minified version
+# Build basic template
 npm run build
 
-# Watch for changes (development)
-npm run watch
+# Build dashboard template with charts
+npm run build:dashboard
+
+# Build both
+npm run build:all
 ```
 
 ## 📖 Usage Examples
 
 See the `examples/` directory for complete ESP32 projects:
-- **Basic**: Simple status dashboard
-- **Sensors**: Temperature and humidity monitor
-- **Control**: LED and relay control panel
-- **Advanced**: Full home automation interface
+
+### Basic Example (`esp32-basic/`)
+- Simple status dashboard
+- Sensor readings (temperature, humidity)
+- LED and brightness control
+- System monitoring (uptime, memory, WiFi)
+- Perfect for getting started
+
+### Advanced Dashboard (`esp32-dashboard/`)
+- 📊 **Charts**: Line and bar charts for data visualization
+- 📈 **Sparklines**: Inline mini charts for metrics
+- 📉 **Gauges**: Circular progress indicators
+- 📋 **Tables**: Sortable data tables with sensor logs
+- 🎯 **Stat Cards**: Key metrics with trend indicators
+- 📃 **Timeline**: Activity log
+- 🔄 **Real-time Updates**: Auto-refreshing data
 
 ## 📊 Size Comparison
 
 | Framework | Gzipped Size | Features |
 |-----------|--------------|----------|
-| **NanoUI** | ~8KB | Essential UI components |
+| **NanoUI Basic** | ~7KB | Essential UI + controls |
+| **NanoUI Dashboard** | ~8KB | Full charts & tables |
 | Bootstrap | ~25KB | Full framework |
 | Material UI | ~90KB | React-based |
 | Tailwind | ~10-50KB | Utility-first (varies) |
@@ -97,17 +130,24 @@ See the `examples/` directory for complete ESP32 projects:
 # Project structure
 nanoui/
 ├── src/
-│   ├── nanoui.css      # Main stylesheet
-│   ├── nanoui.js       # JavaScript utilities
-│   └── template.html   # HTML template
+│   ├── nanoui.css              # Main stylesheet
+│   ├── nanoui.js               # JavaScript utilities
+│   ├── template.html           # Basic template
+│   └── dashboard-template.html # Dashboard template
 ├── dist/
-│   ├── nanoui.html     # All-in-one minified file
-│   ├── nanoui.min.css  # Standalone CSS
-│   └── nanoui.min.js   # Standalone JS
+│   ├── nanoui.html             # Basic UI (7KB gzipped)
+│   ├── dashboard.html          # Dashboard (8KB gzipped)
+│   ├── nanoui.min.css          # Standalone CSS
+│   └── nanoui.min.js           # Standalone JS
 ├── examples/
-│   └── esp32-basic/    # ESP32 examples
+│   ├── esp32-basic/            # Basic example
+│   └── esp32-dashboard/        # Advanced dashboard
+├── docs/
+│   ├── API.md                  # Complete API reference
+│   ├── COMPONENTS.md           # Component guide
+│   └── GETTING_STARTED.md      # Getting started guide
 └── tools/
-    └── build.js        # Build scripts
+    └── build.js                # Build scripts
 ```
 
 ## 🎨 Customization

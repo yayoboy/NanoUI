@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NanoUI Data Dashboard</title>
+  <style>
+    /* CSS_PLACEHOLDER */
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-3">
+      <h1>ESP32 Data Dashboard</h1>
+      <p class="text-secondary">Real-time monitoring with charts & tables</p>
+    </div>
+
+    <!-- Stat Cards Row -->
+    <div class="row">
+      <div class="col-3">
+        <div class="stat-card">
+          <div class="stat-card-icon">📊</div>
+          <div class="stat-card-value" id="total-requests">0</div>
+          <div class="stat-card-label">Total Requests</div>
+          <div class="stat-card-change positive">↑ 12%</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat-card">
+          <div class="stat-card-icon">🌡️</div>
+          <div class="stat-card-value" id="avg-temp">--</div>
+          <div class="stat-card-label">Avg Temperature</div>
+          <div class="stat-card-change positive">↑ 2.5°C</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat-card">
+          <div class="stat-card-icon">💾</div>
+          <div class="stat-card-value" id="memory-usage">--</div>
+          <div class="stat-card-label">Memory Usage</div>
+          <div class="stat-card-change negative">↓ 5%</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat-card">
+          <div class="stat-card-icon">📡</div>
+          <div class="stat-card-value" id="wifi-quality">--</div>
+          <div class="stat-card-label">WiFi Quality</div>
+          <div class="stat-card-change positive">↑ Excellent</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">Temperature Trend</div>
+          <div class="card-body">
+            <div id="temp-chart" class="chart-container"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">CPU Usage</div>
+          <div class="card-body">
+            <div id="cpu-chart" class="chart-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics and Gauges -->
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">System Metrics</div>
+          <div class="card-body">
+            <div class="metric">
+              <div class="metric-icon">💻</div>
+              <div class="metric-content">
+                <div class="metric-label">CPU Usage</div>
+                <div class="metric-value" id="cpu-value">45%</div>
+              </div>
+              <div id="cpu-sparkline"></div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-icon success">💾</div>
+              <div class="metric-content">
+                <div class="metric-label">Free Memory</div>
+                <div class="metric-value" id="mem-value">256 KB</div>
+              </div>
+              <div id="mem-sparkline"></div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-icon warning">⚡</div>
+              <div class="metric-content">
+                <div class="metric-label">Power Consumption</div>
+                <div class="metric-value" id="power-value">3.2W</div>
+              </div>
+              <div id="power-sparkline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">Storage & Network</div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Flash Storage</label>
+              <div class="progress">
+                <div class="progress-bar progress-bar-info" id="storage-bar" style="width: 0%">0%</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Upload Speed</label>
+              <div class="progress progress-sm">
+                <div class="progress-bar progress-bar-success" id="upload-bar" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Download Speed</label>
+              <div class="progress progress-sm">
+                <div class="progress-bar progress-bar-primary" id="download-bar" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="form-group text-center">
+              <label>CPU Load</label>
+              <div id="cpu-gauge"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header">
+        <span>Sensor Readings Log</span>
+        <button class="btn btn-sm btn-primary" onclick="refreshTable()">Refresh</button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive" id="sensor-table"></div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">Recent Activity</div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-time">2 min ago</div>
+                <div class="timeline-content">Temperature sensor updated: 24.5°C</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-time">5 min ago</div>
+                <div class="timeline-content">WiFi reconnected</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-time">12 min ago</div>
+                <div class="timeline-content">System reboot completed</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-time">1 hour ago</div>
+                <div class="timeline-content">Firmware update installed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">System Information</div>
+          <div class="card-body">
+            <ul class="data-list">
+              <li class="data-list-item">
+                <span class="data-list-label">Chip Model</span>
+                <span class="data-list-value">ESP32-WROOM-32</span>
+              </li>
+              <li class="data-list-item">
+                <span class="data-list-label">Firmware Version</span>
+                <span class="data-list-value">v2.1.0</span>
+              </li>
+              <li class="data-list-item">
+                <span class="data-list-label">Uptime</span>
+                <span class="data-list-value" id="uptime">--</span>
+              </li>
+              <li class="data-list-item">
+                <span class="data-list-label">IP Address</span>
+                <span class="data-list-value">192.168.1.100</span>
+              </li>
+              <li class="data-list-item">
+                <span class="data-list-label">MAC Address</span>
+                <span class="data-list-value">AA:BB:CC:DD:EE:FF</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* JS_PLACEHOLDER */
+
+    // Demo data generators
+    function generateTempData() {
+      const data = [];
+      for (let i = 0; i < 20; i++) {
+        data.push(20 + Math.random() * 10);
+      }
+      return data;
+    }
+
+    function generateCPUData() {
+      const data = [];
+      for (let i = 0; i < 10; i++) {
+        data.push({ label: `${i}`, value: Math.random() * 100 });
+      }
+      return data;
+    }
+
+    // Initialize charts
+    function initCharts() {
+      // Temperature line chart
+      const tempData = generateTempData();
+      NanoUI.Chart.line('#temp-chart', tempData, {
+        color: '#dc3545',
+        fill: true
+      });
+
+      // CPU bar chart
+      const cpuData = generateCPUData();
+      NanoUI.Chart.bar('#cpu-chart', cpuData, {
+        color: '#007bff',
+        showLabels: true
+      });
+
+      // Sparklines
+      NanoUI.Chart.sparkline('#cpu-sparkline', [45, 52, 48, 55, 50, 58, 45], '#007bff');
+      NanoUI.Chart.sparkline('#mem-sparkline', [200, 210, 195, 205, 198, 190, 185], '#28a745');
+      NanoUI.Chart.sparkline('#power-sparkline', [3.1, 3.3, 3.2, 3.4, 3.2, 3.3, 3.2], '#ffc107');
+
+      // CPU Gauge
+      NanoUI.Gauge.create('#cpu-gauge', 45, {
+        color: '#007bff',
+        size: 120
+      });
+    }
+
+    // Initialize progress bars
+    function initProgress() {
+      NanoUI.Progress.animate('#storage-bar', 67, 1500);
+      NanoUI.Progress.animate('#upload-bar', 82, 1500);
+      NanoUI.Progress.animate('#download-bar', 45, 1500);
+    }
+
+    // Initialize table
+    function refreshTable() {
+      const sensorData = [
+        { timestamp: '10:35:22', sensor: 'DHT22', temp: 24.5, humidity: 45.2, status: 'OK' },
+        { timestamp: '10:35:17', sensor: 'BMP280', temp: 24.3, humidity: 44.8, status: 'OK' },
+        { timestamp: '10:35:12', sensor: 'DHT22', temp: 24.6, humidity: 45.5, status: 'OK' },
+        { timestamp: '10:35:07', sensor: 'BMP280', temp: 24.2, humidity: 44.5, status: 'OK' },
+        { timestamp: '10:35:02', sensor: 'DHT22', temp: 24.4, humidity: 45.0, status: 'Warning' },
+      ];
+
+      const columns = [
+        { key: 'timestamp', label: 'Time' },
+        { key: 'sensor', label: 'Sensor' },
+        {
+          key: 'temp',
+          label: 'Temperature',
+          format: (val) => val.toFixed(1) + '°C'
+        },
+        {
+          key: 'humidity',
+          label: 'Humidity',
+          format: (val) => val.toFixed(1) + '%'
+        },
+        {
+          key: 'status',
+          label: 'Status',
+          format: (val) => `<span class="badge badge-${val === 'OK' ? 'success' : 'warning'}">${val}</span>`
+        }
+      ];
+
+      NanoUI.Table.create('#sensor-table', sensorData, columns);
+      NanoUI.Table.enableSort('#sensor-table table');
+    }
+
+    // Update live data
+    function updateLiveData() {
+      // Update stat cards
+      const requests = Math.floor(Math.random() * 1000);
+      NanoUI.UI.setText('#total-requests', requests);
+
+      const temp = (20 + Math.random() * 10).toFixed(1) + '°C';
+      NanoUI.UI.setText('#avg-temp', temp);
+
+      const memory = Math.floor(50 + Math.random() * 50) + '%';
+      NanoUI.UI.setText('#memory-usage', memory);
+
+      NanoUI.UI.setText('#wifi-quality', 'Good');
+
+      // Update gauge
+      const cpuLoad = Math.floor(30 + Math.random() * 40);
+      NanoUI.Gauge.update('#cpu-gauge', cpuLoad);
+
+      // Update uptime
+      const uptime = Math.floor(Date.now() / 1000 - 86400);
+      NanoUI.UI.setText('#uptime', NanoUI.Format.uptime(uptime));
+
+      // In production, replace with actual API calls:
+      // NanoUI.API.get('/api/stats', (data) => {
+      //   NanoUI.UI.setText('#total-requests', data.requests);
+      //   NanoUI.Gauge.update('#cpu-gauge', data.cpu);
+      //   // ... update other values
+      // });
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      initProgress();
+      refreshTable();
+      updateLiveData();
+
+      // Auto-refresh live data every 5 seconds
+      NanoUI.AutoRefresh.start('liveData', updateLiveData, 5000);
+    });
+  </script>
+</body>
+</html>

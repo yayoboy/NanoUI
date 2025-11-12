@@ -16,15 +16,15 @@ if (!fs.existsSync(DIST_DIR)) {
   fs.mkdirSync(DIST_DIR, { recursive: true });
 }
 
-async function build() {
-  console.log('🚀 Building NanoUI...\n');
+async function build(templateName = 'template.html', outputName = 'nanoui.html') {
+  console.log(`🚀 Building NanoUI${templateName !== 'template.html' ? ' (' + templateName + ')' : ''}...\n`);
 
   try {
     // Read source files
     console.log('📖 Reading source files...');
     const cssContent = fs.readFileSync(path.join(SRC_DIR, 'nanoui.css'), 'utf8');
     const jsContent = fs.readFileSync(path.join(SRC_DIR, 'nanoui.js'), 'utf8');
-    const htmlTemplate = fs.readFileSync(path.join(SRC_DIR, 'template.html'), 'utf8');
+    const htmlTemplate = fs.readFileSync(path.join(SRC_DIR, templateName), 'utf8');
 
     // Minify CSS
     console.log('🎨 Minifying CSS...');
@@ -87,10 +87,10 @@ async function build() {
       .replace('/* CSS_PLACEHOLDER */', minifiedCSS.styles)
       .replace('/* JS_PLACEHOLDER */', minifiedJS.code);
 
-    fs.writeFileSync(path.join(DIST_DIR, 'nanoui.html'), finalHTML);
+    fs.writeFileSync(path.join(DIST_DIR, outputName), finalHTML);
 
     const htmlSize = Buffer.byteLength(finalHTML, 'utf8');
-    console.log(`   ✅ nanoui.html (${htmlSize} bytes)\n`);
+    console.log(`   ✅ ${outputName} (${htmlSize} bytes)\n`);
 
     // Calculate gzipped size (approximate)
     const zlib = require('zlib');
@@ -120,4 +120,9 @@ async function build() {
 }
 
 // Run build
-build();
+const args = process.argv.slice(2);
+if (args.includes('--dashboard')) {
+  build('dashboard-template.html', 'dashboard.html');
+} else {
+  build();
+}

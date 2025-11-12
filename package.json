@@ -5,6 +5,8 @@
   "main": "dist/nanoui.min.js",
   "scripts": {
     "build": "node tools/build.js",
+    "build:dashboard": "node tools/build.js --dashboard",
+    "build:all": "node tools/build.js && node tools/build.js --dashboard",
     "minify": "node tools/minify.js",
     "watch": "node tools/build.js --watch"
   },

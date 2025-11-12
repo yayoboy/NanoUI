@@ -349,6 +349,297 @@ const NanoUI = (function() {
     }
   };
 
+  // Chart utilities
+  const Chart = {
+    /**
+     * Create a line chart (SVG)
+     * @param {string} selector - Container selector
+     * @param {array} data - Array of numbers
+     * @param {object} options - Chart options
+     */
+    line(selector, data, options = {}) {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      const width = options.width || container.clientWidth;
+      const height = options.height || 150;
+      const padding = options.padding || 20;
+      const color = options.color || '#007bff';
+      const fill = options.fill || false;
+
+      const max = Math.max(...data);
+      const min = Math.min(...data);
+      const range = max - min || 1;
+
+      const points = data.map((val, i) => {
+        const x = padding + (i * (width - padding * 2) / (data.length - 1));
+        const y = height - padding - ((val - min) / range) * (height - padding * 2);
+        return `${x},${y}`;
+      }).join(' ');
+
+      let svg = `<svg class="chart" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
+
+      if (fill) {
+        const fillPoints = `${padding},${height - padding} ${points} ${width - padding},${height - padding}`;
+        svg += `<polygon points="${fillPoints}" fill="${color}" opacity="0.2"/>`;
+      }
+
+      svg += `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="2"/>`;
+
+      // Add dots
+      data.forEach((val, i) => {
+        const x = padding + (i * (width - padding * 2) / (data.length - 1));
+        const y = height - padding - ((val - min) / range) * (height - padding * 2);
+        svg += `<circle cx="${x}" cy="${y}" r="3" fill="${color}"/>`;
+      });
+
+      svg += '</svg>';
+      container.innerHTML = svg;
+    },
+
+    /**
+     * Create a bar chart (SVG)
+     * @param {string} selector - Container selector
+     * @param {array} data - Array of {label, value}
+     * @param {object} options - Chart options
+     */
+    bar(selector, data, options = {}) {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      const width = options.width || container.clientWidth;
+      const height = options.height || 150;
+      const padding = options.padding || 20;
+      const color = options.color || '#007bff';
+
+      const max = Math.max(...data.map(d => d.value));
+      const barWidth = (width - padding * 2) / data.length - 5;
+
+      let svg = `<svg class="chart" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
+
+      data.forEach((item, i) => {
+        const barHeight = (item.value / max) * (height - padding * 2);
+        const x = padding + i * (barWidth + 5);
+        const y = height - padding - barHeight;
+
+        svg += `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" fill="${color}" rx="2"/>`;
+
+        if (options.showLabels) {
+          svg += `<text x="${x + barWidth / 2}" y="${height - 5}" text-anchor="middle" font-size="10" fill="currentColor">${item.label}</text>`;
+        }
+      });
+
+      svg += '</svg>';
+      container.innerHTML = svg;
+    },
+
+    /**
+     * Create a sparkline (small line chart)
+     * @param {string} selector - Container selector
+     * @param {array} data - Array of numbers
+     * @param {string} color - Line color
+     */
+    sparkline(selector, data, color = '#007bff') {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      const width = container.clientWidth || 200;
+      const height = 40;
+
+      const max = Math.max(...data);
+      const min = Math.min(...data);
+      const range = max - min || 1;
+
+      const points = data.map((val, i) => {
+        const x = (i * width / (data.length - 1));
+        const y = height - ((val - min) / range) * height;
+        return `${x},${y}`;
+      }).join(' ');
+
+      const svg = `<svg class="sparkline" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="${points}" fill="none" stroke="${color}" stroke-width="2"/>
+      </svg>`;
+
+      container.innerHTML = svg;
+    }
+  };
+
+  // Gauge utilities
+  const Gauge = {
+    /**
+     * Create or update a circular gauge
+     * @param {string} selector - Container selector
+     * @param {number} value - Value (0-100)
+     * @param {object} options - Gauge options
+     */
+    create(selector, value, options = {}) {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      const color = options.color || '#007bff';
+      const size = options.size || 120;
+      const strokeWidth = options.strokeWidth || 10;
+
+      const radius = (size - strokeWidth) / 2;
+      const circumference = radius * 2 * Math.PI;
+      const offset = circumference - (value / 100) * circumference;
+
+      const html = `
+        <div class="gauge" style="width: ${size}px; height: ${size}px;">
+          <svg width="${size}" height="${size}">
+            <circle class="gauge-bg" cx="${size/2}" cy="${size/2}" r="${radius}"/>
+            <circle class="gauge-fill" cx="${size/2}" cy="${size/2}" r="${radius}"
+                    style="stroke: ${color}; stroke-dasharray: ${circumference}; stroke-dashoffset: ${offset};"/>
+          </svg>
+          <div class="gauge-text">${value}%</div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    },
+
+    /**
+     * Update existing gauge value
+     * @param {string} selector - Container selector
+     * @param {number} value - New value (0-100)
+     */
+    update(selector, value) {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      const circle = container.querySelector('.gauge-fill');
+      const text = container.querySelector('.gauge-text');
+
+      if (circle && text) {
+        const radius = parseFloat(circle.getAttribute('r'));
+        const circumference = radius * 2 * Math.PI;
+        const offset = circumference - (value / 100) * circumference;
+
+        circle.style.strokeDashoffset = offset;
+        text.textContent = value + '%';
+      }
+    }
+  };
+
+  // Table utilities
+  const Table = {
+    /**
+     * Create a dynamic table from data
+     * @param {string} selector - Container selector
+     * @param {array} data - Array of objects
+     * @param {array} columns - Column definitions
+     */
+    create(selector, data, columns) {
+      const container = document.querySelector(selector);
+      if (!container) return;
+
+      let html = '<table class="table"><thead><tr>';
+
+      columns.forEach(col => {
+        html += `<th>${col.label}</th>`;
+      });
+
+      html += '</tr></thead><tbody>';
+
+      data.forEach(row => {
+        html += '<tr>';
+        columns.forEach(col => {
+          const value = col.format ? col.format(row[col.key]) : row[col.key];
+          html += `<td>${value}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    },
+
+    /**
+     * Add sorting to table headers
+     * @param {string} selector - Table selector
+     */
+    enableSort(selector) {
+      const table = document.querySelector(selector);
+      if (!table) return;
+
+      const headers = table.querySelectorAll('th');
+      headers.forEach((header, index) => {
+        header.style.cursor = 'pointer';
+        header.addEventListener('click', () => {
+          const tbody = table.querySelector('tbody');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+
+          const isAscending = header.classList.contains('sort-asc');
+
+          rows.sort((a, b) => {
+            const aValue = a.cells[index].textContent;
+            const bValue = b.cells[index].textContent;
+
+            const aNum = parseFloat(aValue);
+            const bNum = parseFloat(bValue);
+
+            if (!isNaN(aNum) && !isNaN(bNum)) {
+              return isAscending ? bNum - aNum : aNum - bNum;
+            }
+
+            return isAscending ?
+              bValue.localeCompare(aValue) :
+              aValue.localeCompare(bValue);
+          });
+
+          rows.forEach(row => tbody.appendChild(row));
+
+          headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+          header.classList.add(isAscending ? 'sort-desc' : 'sort-asc');
+        });
+      });
+    }
+  };
+
+  // Progress bar utilities
+  const Progress = {
+    /**
+     * Set progress bar value
+     * @param {string} selector - Progress bar selector
+     * @param {number} value - Value (0-100)
+     */
+    set(selector, value) {
+      const bar = document.querySelector(selector);
+      if (bar) {
+        bar.style.width = value + '%';
+        bar.textContent = value + '%';
+      }
+    },
+
+    /**
+     * Animate progress bar
+     * @param {string} selector - Progress bar selector
+     * @param {number} target - Target value (0-100)
+     * @param {number} duration - Animation duration in ms
+     */
+    animate(selector, target, duration = 1000) {
+      const bar = document.querySelector(selector);
+      if (!bar) return;
+
+      const start = parseFloat(bar.style.width) || 0;
+      const startTime = Date.now();
+
+      const step = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = start + (target - start) * progress;
+
+        this.set(selector, Math.round(value));
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      };
+
+      requestAnimationFrame(step);
+    }
+  };
+
   // Initialize on DOM ready
   function init() {
     Theme.init();
@@ -398,6 +689,10 @@ const NanoUI = (function() {
     UI,
     Format,
     WS,
+    Chart,
+    Gauge,
+    Table,
+    Progress,
     init
   };
 })();
