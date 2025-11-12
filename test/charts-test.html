@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charts Test - NanoUI</title>
+  <link rel="stylesheet" href="../dist/nanoui.min.css">
+</head>
+<body>
+  <button class="theme-toggle">🌙</button>
+
+  <div class="container">
+    <h1 class="text-center">NanoUI Charts Test</h1>
+    <p class="text-center text-secondary mb-3">Testing all chart types</p>
+
+    <div class="alert alert-info">
+      All charts below are generated with JavaScript. Check console for any errors.
+    </div>
+
+    <!-- Line Chart -->
+    <div class="card">
+      <div class="card-header">
+        <span>Line Chart</span>
+        <button class="btn btn-sm btn-primary" onclick="updateLineChart()">Refresh</button>
+      </div>
+      <div class="card-body">
+        <div id="line-chart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Line Chart with Fill -->
+    <div class="card">
+      <div class="card-header">Line Chart with Fill</div>
+      <div class="card-body">
+        <div id="line-chart-fill" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="card">
+      <div class="card-header">
+        <span>Bar Chart</span>
+        <button class="btn btn-sm btn-success" onclick="updateBarChart()">Refresh</button>
+      </div>
+      <div class="card-body">
+        <div id="bar-chart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Sparklines -->
+    <div class="card">
+      <div class="card-header">Sparklines</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4">
+            <div class="metric">
+              <div class="metric-icon">💻</div>
+              <div class="metric-content">
+                <div class="metric-label">CPU Usage</div>
+                <div class="metric-value">45%</div>
+              </div>
+              <div id="cpu-spark" style="width: 100px;"></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="metric">
+              <div class="metric-icon success">💾</div>
+              <div class="metric-content">
+                <div class="metric-label">Memory</div>
+                <div class="metric-value">256 KB</div>
+              </div>
+              <div id="mem-spark" style="width: 100px;"></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="metric">
+              <div class="metric-icon warning">⚡</div>
+              <div class="metric-content">
+                <div class="metric-label">Power</div>
+                <div class="metric-value">3.2W</div>
+              </div>
+              <div id="power-spark" style="width: 100px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multiple Charts -->
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">Temperature (°C)</div>
+          <div class="card-body">
+            <div id="temp-chart" class="chart-container" style="height: 120px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">Humidity (%)</div>
+          <div class="card-body">
+            <div id="humidity-chart" class="chart-container" style="height: 120px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Test Results</div>
+      <div class="card-body">
+        <div id="test-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dist/nanoui.min.js"></script>
+  <script>
+    const results = [];
+
+    function test(name, fn) {
+      try {
+        fn();
+        results.push(`✅ ${name}: PASSED`);
+      } catch (error) {
+        results.push(`❌ ${name}: FAILED - ${error.message}`);
+        console.error(`Test failed: ${name}`, error);
+      }
+    }
+
+    function generateRandomData(count, min = 10, max = 50) {
+      return Array.from({ length: count }, () =>
+        Math.random() * (max - min) + min
+      );
+    }
+
+    function generateBarData(count) {
+      return Array.from({ length: count }, (_, i) => ({
+        label: String(i),
+        value: Math.random() * 100
+      }));
+    }
+
+    function updateLineChart() {
+      const data = generateRandomData(20);
+      NanoUI.Chart.line('#line-chart', data, {
+        color: '#007bff',
+        fill: false
+      });
+    }
+
+    function updateBarChart() {
+      const data = generateBarData(10);
+      NanoUI.Chart.bar('#bar-chart', data, {
+        color: '#28a745',
+        showLabels: true
+      });
+    }
+
+    function runTests() {
+      console.log('Running chart tests...');
+
+      // Test line chart
+      test('Line Chart', () => {
+        const data = generateRandomData(20);
+        NanoUI.Chart.line('#line-chart', data, {
+          color: '#007bff'
+        });
+        if (!document.querySelector('#line-chart svg')) {
+          throw new Error('SVG not created');
+        }
+      });
+
+      // Test line chart with fill
+      test('Line Chart with Fill', () => {
+        const data = generateRandomData(15, 20, 30);
+        NanoUI.Chart.line('#line-chart-fill', data, {
+          color: '#dc3545',
+          fill: true
+        });
+      });
+
+      // Test bar chart
+      test('Bar Chart', () => {
+        const data = generateBarData(8);
+        NanoUI.Chart.bar('#bar-chart', data, {
+          color: '#28a745',
+          showLabels: true
+        });
+      });
+
+      // Test sparklines
+      test('Sparkline - CPU', () => {
+        NanoUI.Chart.sparkline('#cpu-spark', [45, 52, 48, 55, 50, 58, 45], '#007bff');
+      });
+
+      test('Sparkline - Memory', () => {
+        NanoUI.Chart.sparkline('#mem-spark', [200, 210, 195, 205, 198], '#28a745');
+      });
+
+      test('Sparkline - Power', () => {
+        NanoUI.Chart.sparkline('#power-spark', [3.1, 3.3, 3.2, 3.4], '#ffc107');
+      });
+
+      // Test smaller charts
+      test('Temperature Chart', () => {
+        const data = generateRandomData(15, 18, 28);
+        NanoUI.Chart.line('#temp-chart', data, {
+          color: '#dc3545',
+          fill: true,
+          height: 120
+        });
+      });
+
+      test('Humidity Chart', () => {
+        const data = generateRandomData(15, 40, 60);
+        NanoUI.Chart.line('#humidity-chart', data, {
+          color: '#17a2b8',
+          fill: true,
+          height: 120
+        });
+      });
+
+      // Display results
+      const resultDiv = document.getElementById('test-results');
+      resultDiv.innerHTML = results.map(r =>
+        `<div class="mb-1">${r}</div>`
+      ).join('');
+
+      const passed = results.filter(r => r.includes('PASSED')).length;
+      const total = results.length;
+
+      if (passed === total) {
+        resultDiv.innerHTML += `<div class="alert alert-success mt-2">All ${total} tests passed! ✅</div>`;
+      } else {
+        resultDiv.innerHTML += `<div class="alert alert-danger mt-2">${passed}/${total} tests passed</div>`;
+      }
+    }
+
+    // Run tests on load
+    document.addEventListener('DOMContentLoaded', () => {
+      runTests();
+    });
+  </script>
+</body>
+</html>

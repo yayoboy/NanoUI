@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tables & Gauges Test - NanoUI</title>
+  <link rel="stylesheet" href="../dist/nanoui.min.css">
+</head>
+<body>
+  <button class="theme-toggle">🌙</button>
+
+  <div class="container">
+    <h1 class="text-center">Tables & Gauges Test</h1>
+    <p class="text-center text-secondary mb-3">Testing dynamic tables, gauges, and progress bars</p>
+
+    <div class="alert alert-info">
+      Check console for test results. All components should render correctly.
+    </div>
+
+    <!-- Dynamic Table -->
+    <div class="card">
+      <div class="card-header">
+        <span>Dynamic Table with Sorting</span>
+        <button class="btn btn-sm btn-primary" onclick="refreshTable()">Refresh</button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive" id="dynamic-table"></div>
+        <p class="text-secondary mt-2">Click column headers to sort</p>
+      </div>
+    </div>
+
+    <!-- Gauges -->
+    <div class="card">
+      <div class="card-header">
+        <span>Circular Gauges</span>
+        <button class="btn btn-sm btn-success" onclick="updateGauges()">Update Values</button>
+      </div>
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col-3">
+            <label>CPU Usage</label>
+            <div id="gauge-cpu"></div>
+          </div>
+          <div class="col-3">
+            <label>Memory</label>
+            <div id="gauge-memory"></div>
+          </div>
+          <div class="col-3">
+            <label>Disk</label>
+            <div id="gauge-disk"></div>
+          </div>
+          <div class="col-3">
+            <label>Network</label>
+            <div id="gauge-network"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="card">
+      <div class="card-header">
+        <span>Progress Bars</span>
+        <button class="btn btn-sm btn-warning" onclick="animateProgress()">Animate</button>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Storage (Normal)</label>
+          <div class="progress">
+            <div class="progress-bar progress-bar-info" id="progress-1" style="width: 0%">0%</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Upload (Success)</label>
+          <div class="progress">
+            <div class="progress-bar progress-bar-success" id="progress-2" style="width: 0%">0%</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Download (Danger)</label>
+          <div class="progress">
+            <div class="progress-bar progress-bar-danger" id="progress-3" style="width: 0%">0%</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Processing (Striped & Animated)</label>
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-4" style="width: 0%">0%</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Small Progress</label>
+          <div class="progress progress-sm">
+            <div class="progress-bar progress-bar-warning" id="progress-5" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Static Table -->
+    <div class="card">
+      <div class="card-header">Static HTML Table</div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Sensor</th>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Temperature</td>
+              <td>24.5</td>
+              <td>°C</td>
+              <td><span class="badge badge-success">OK</span></td>
+            </tr>
+            <tr>
+              <td>Humidity</td>
+              <td>45.2</td>
+              <td>%</td>
+              <td><span class="badge badge-success">OK</span></td>
+            </tr>
+            <tr>
+              <td>Pressure</td>
+              <td>1013</td>
+              <td>hPa</td>
+              <td><span class="badge badge-warning">High</span></td>
+            </tr>
+            <tr>
+              <td>CO2</td>
+              <td>850</td>
+              <td>ppm</td>
+              <td><span class="badge badge-danger">Alert</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Test Results -->
+    <div class="card">
+      <div class="card-header">Test Results</div>
+      <div class="card-body">
+        <div id="test-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dist/nanoui.min.js"></script>
+  <script>
+    const results = [];
+
+    function test(name, fn) {
+      try {
+        fn();
+        results.push(`✅ ${name}: PASSED`);
+      } catch (error) {
+        results.push(`❌ ${name}: FAILED - ${error.message}`);
+        console.error(`Test failed: ${name}`, error);
+      }
+    }
+
+    function generateTableData(rows = 10) {
+      const sensors = ['DHT22', 'BMP280', 'BME680', 'SHT31'];
+      const statuses = ['OK', 'Warning', 'Error'];
+
+      return Array.from({ length: rows }, (_, i) => ({
+        timestamp: `10:${String(35 + i).padStart(2, '0')}:${String(i * 5).padStart(2, '0')}`,
+        sensor: sensors[i % sensors.length],
+        temp: (20 + Math.random() * 10).toFixed(1),
+        humidity: (40 + Math.random() * 20).toFixed(1),
+        status: i < 7 ? 'OK' : statuses[Math.floor(Math.random() * statuses.length)]
+      }));
+    }
+
+    function refreshTable() {
+      const data = generateTableData(15);
+
+      const columns = [
+        { key: 'timestamp', label: 'Time' },
+        { key: 'sensor', label: 'Sensor' },
+        {
+          key: 'temp',
+          label: 'Temperature',
+          format: (v) => v + '°C'
+        },
+        {
+          key: 'humidity',
+          label: 'Humidity',
+          format: (v) => v + '%'
+        },
+        {
+          key: 'status',
+          label: 'Status',
+          format: (v) => {
+            const color = v === 'OK' ? 'success' : (v === 'Warning' ? 'warning' : 'danger');
+            return `<span class="badge badge-${color}">${v}</span>`;
+          }
+        }
+      ];
+
+      NanoUI.Table.create('#dynamic-table', data, columns);
+      NanoUI.Table.enableSort('#dynamic-table table');
+    }
+
+    function updateGauges() {
+      NanoUI.Gauge.update('#gauge-cpu', Math.floor(Math.random() * 100));
+      NanoUI.Gauge.update('#gauge-memory', Math.floor(Math.random() * 100));
+      NanoUI.Gauge.update('#gauge-disk', Math.floor(Math.random() * 100));
+      NanoUI.Gauge.update('#gauge-network', Math.floor(Math.random() * 100));
+    }
+
+    function animateProgress() {
+      NanoUI.Progress.animate('#progress-1', Math.floor(Math.random() * 100), 1500);
+      NanoUI.Progress.animate('#progress-2', Math.floor(Math.random() * 100), 1500);
+      NanoUI.Progress.animate('#progress-3', Math.floor(Math.random() * 100), 1500);
+      NanoUI.Progress.animate('#progress-4', Math.floor(Math.random() * 100), 1500);
+      NanoUI.Progress.animate('#progress-5', Math.floor(Math.random() * 100), 1500);
+    }
+
+    function runTests() {
+      console.log('Running tables and gauges tests...');
+
+      // Test table creation
+      test('Dynamic Table Creation', () => {
+        const data = generateTableData(5);
+        const columns = [
+          { key: 'timestamp', label: 'Time' },
+          { key: 'sensor', label: 'Sensor' },
+          { key: 'temp', label: 'Temp', format: v => v + '°C' }
+        ];
+
+        NanoUI.Table.create('#dynamic-table', data, columns);
+
+        const table = document.querySelector('#dynamic-table table');
+        if (!table) throw new Error('Table not created');
+
+        const rows = table.querySelectorAll('tbody tr');
+        if (rows.length !== 5) throw new Error(`Expected 5 rows, got ${rows.length}`);
+      });
+
+      // Test table sorting
+      test('Table Sorting', () => {
+        NanoUI.Table.enableSort('#dynamic-table table');
+        const headers = document.querySelectorAll('#dynamic-table th');
+        if (headers.length === 0) throw new Error('No headers found');
+      });
+
+      // Test gauges
+      test('Gauge Creation - CPU', () => {
+        NanoUI.Gauge.create('#gauge-cpu', 45, { color: '#007bff', size: 100 });
+        const gauge = document.querySelector('#gauge-cpu .gauge');
+        if (!gauge) throw new Error('Gauge not created');
+      });
+
+      test('Gauge Creation - Memory', () => {
+        NanoUI.Gauge.create('#gauge-memory', 67, { color: '#28a745', size: 100 });
+      });
+
+      test('Gauge Creation - Disk', () => {
+        NanoUI.Gauge.create('#gauge-disk', 82, { color: '#ffc107', size: 100 });
+      });
+
+      test('Gauge Creation - Network', () => {
+        NanoUI.Gauge.create('#gauge-network', 23, { color: '#17a2b8', size: 100 });
+      });
+
+      // Test gauge update
+      test('Gauge Update', () => {
+        NanoUI.Gauge.update('#gauge-cpu', 75);
+        const text = document.querySelector('#gauge-cpu .gauge-text');
+        if (!text || text.textContent !== '75%') {
+          throw new Error('Gauge not updated correctly');
+        }
+      });
+
+      // Test progress bars
+      test('Progress Bar Set', () => {
+        NanoUI.Progress.set('#progress-1', 50);
+        const bar = document.querySelector('#progress-1');
+        if (bar.style.width !== '50%') {
+          throw new Error('Progress bar not set correctly');
+        }
+      });
+
+      test('Progress Bar Animate', () => {
+        NanoUI.Progress.animate('#progress-2', 75, 100);
+        // Just check it doesn't throw
+      });
+
+      // Display results
+      const resultDiv = document.getElementById('test-results');
+      resultDiv.innerHTML = results.map(r =>
+        `<div class="mb-1">${r}</div>`
+      ).join('');
+
+      const passed = results.filter(r => r.includes('PASSED')).length;
+      const total = results.length;
+
+      if (passed === total) {
+        resultDiv.innerHTML += `<div class="alert alert-success mt-2">All ${total} tests passed! ✅</div>`;
+      } else {
+        resultDiv.innerHTML += `<div class="alert alert-danger mt-2">${passed}/${total} tests passed</div>`;
+      }
+    }
+
+    // Run tests and initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      runTests();
+
+      // Initial progress values
+      NanoUI.Progress.set('#progress-1', 25);
+      NanoUI.Progress.set('#progress-2', 50);
+      NanoUI.Progress.set('#progress-3', 75);
+      NanoUI.Progress.set('#progress-4', 60);
+      NanoUI.Progress.set('#progress-5', 40);
+    });
+  </script>
+</body>
+</html>
