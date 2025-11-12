@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NanoUI Dashboard</title>
+  <style>
+    /* CSS_PLACEHOLDER */
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-3">
+      <h1>ESP32 Dashboard</h1>
+      <p class="text-secondary">NanoUI Framework Demo</p>
+    </div>
+
+    <!-- Status Card -->
+    <div class="card">
+      <div class="card-header">
+        <span>System Status</span>
+        <span class="badge badge-success">Online</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4">
+            <label>Uptime</label>
+            <h3 id="uptime">--</h3>
+          </div>
+          <div class="col-4">
+            <label>Free Memory</label>
+            <h3 id="memory">--</h3>
+          </div>
+          <div class="col-4">
+            <label>WiFi RSSI</label>
+            <h3 id="rssi">--</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sensors Card -->
+    <div class="card">
+      <div class="card-header">Sensor Readings</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label>Temperature</label>
+              <div class="d-flex align-center gap-2">
+                <span style="font-size: 2rem; font-weight: bold;" id="temp">--°C</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label>Humidity</label>
+              <div class="d-flex align-center gap-2">
+                <span style="font-size: 2rem; font-weight: bold;" id="humidity">--%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Card -->
+    <div class="card">
+      <div class="card-header">Controls</div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="d-flex align-center justify-between">
+            LED Control
+            <label class="switch">
+              <input type="checkbox" id="led" data-api="/api/led">
+              <span class="slider"></span>
+            </label>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Brightness: <span class="range-value" id="brightness-value">50</span>%</label>
+          <input type="range" id="brightness" min="0" max="100" value="50">
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" onclick="refreshData()">
+            Refresh Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts Example -->
+    <div class="alert alert-info">
+      <strong>Info:</strong> Connect to your ESP32's API endpoints to see live data.
+    </div>
+  </div>
+
+  <script>
+    /* JS_PLACEHOLDER */
+
+    // Example usage - customize for your ESP32
+    function refreshData() {
+      // Update system status
+      NanoUI.API.get('/api/status', (data) => {
+        NanoUI.UI.setText('#uptime', NanoUI.Format.uptime(data.uptime || 0));
+        NanoUI.UI.setText('#memory', NanoUI.Format.bytes(data.freeMemory || 0));
+        NanoUI.UI.setText('#rssi', (data.rssi || 0) + ' dBm');
+      });
+
+      // Update sensor readings
+      NanoUI.API.get('/api/sensors', (data) => {
+        NanoUI.UI.setText('#temp', NanoUI.Format.number(data.temperature || 0, 1) + '°C');
+        NanoUI.UI.setText('#humidity', NanoUI.Format.number(data.humidity || 0, 1) + '%');
+      });
+    }
+
+    // Auto-refresh every 5 seconds
+    NanoUI.AutoRefresh.start('status', refreshData, 5000);
+
+    // Brightness slider control
+    document.getElementById('brightness').addEventListener('change', (e) => {
+      NanoUI.API.post('/api/brightness', { value: parseInt(e.target.value) });
+    });
+
+    // Initialize with demo data (remove in production)
+    setTimeout(() => {
+      NanoUI.UI.setText('#uptime', '2h 34m 12s');
+      NanoUI.UI.setText('#memory', '45 KB');
+      NanoUI.UI.setText('#rssi', '-67 dBm');
+      NanoUI.UI.setText('#temp', '23.5°C');
+      NanoUI.UI.setText('#humidity', '45.2%');
+    }, 100);
+  </script>
+</body>
+</html>

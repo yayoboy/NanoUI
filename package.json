@@ -1,0 +1,28 @@
+{
+  "name": "nanoui",
+  "version": "1.0.0",
+  "description": "Lightweight UI framework for ESP32 and microcontrollers - Modern web interfaces with minimal memory footprint",
+  "main": "dist/nanoui.min.js",
+  "scripts": {
+    "build": "node tools/build.js",
+    "minify": "node tools/minify.js",
+    "watch": "node tools/build.js --watch"
+  },
+  "keywords": [
+    "esp32",
+    "microcontroller",
+    "ui",
+    "framework",
+    "lightweight",
+    "embedded",
+    "iot",
+    "web-interface"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "clean-css": "^5.3.2",
+    "terser": "^5.19.2",
+    "html-minifier": "^4.0.0"
+  }
+}
