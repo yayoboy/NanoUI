@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NanoUI - Component Showcase</title>
+  <style>
+    /* CSS_PLACEHOLDER */
+
+    /* Showcase specific styles */
+    .showcase-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .showcase-header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+    }
+    .showcase-header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    .section {
+      margin-bottom: 3rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .component-demo {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+    }
+    .component-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .color-swatch {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius);
+      margin: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .color-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.25rem;
+      font-size: 0.75rem;
+      text-align: center;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .chart-container {
+      height: 200px;
+      margin-bottom: 1rem;
+    }
+    .gauge-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .inline-demo {
+      margin-bottom: 1rem;
+    }
+  </style>
+  <script>
+    /* JS_PLACEHOLDER */
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <div class="showcase-header">
+    <h1>⚡ NanoUI Component Showcase</h1>
+    <p>Lightweight UI Framework for ESP32/ESP8266 Microcontrollers</p>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem;">7-8KB gzipped • Zero dependencies • Modern & Responsive</p>
+  </div>
+
+  <div class="container">
+    <!-- Theme Toggle -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <button class="btn btn-primary" onclick="NanoUI.Theme.toggle()">🌓 Toggle Dark Mode</button>
+    </div>
+
+    <!-- Color Palette -->
+    <section class="section">
+      <h2 class="section-title">🎨 Color Palette</h2>
+      <div class="component-demo">
+        <div style="text-align: center;">
+          <div class="color-swatch" style="background: var(--primary);">
+            <span class="color-label">Primary</span>
+          </div>
+          <div class="color-swatch" style="background: var(--success);">
+            <span class="color-label">Success</span>
+          </div>
+          <div class="color-swatch" style="background: var(--warning);">
+            <span class="color-label">Warning</span>
+          </div>
+          <div class="color-swatch" style="background: var(--danger);">
+            <span class="color-label">Danger</span>
+          </div>
+          <div class="color-swatch" style="background: var(--info);">
+            <span class="color-label">Info</span>
+          </div>
+          <div class="color-swatch" style="background: var(--dark);">
+            <span class="color-label">Dark</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="section">
+      <h2 class="section-title">🔘 Buttons</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Standard Buttons</div>
+        <div class="btn-group">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-success">Success</button>
+          <button class="btn btn-warning">Warning</button>
+          <button class="btn btn-danger">Danger</button>
+          <button class="btn btn-info">Info</button>
+          <button class="btn">Default</button>
+        </div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Small Buttons</div>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-primary">Small Primary</button>
+          <button class="btn btn-sm btn-success">Small Success</button>
+          <button class="btn btn-sm btn-danger">Small Danger</button>
+        </div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Full Width Button</div>
+        <button class="btn btn-primary btn-block">Full Width Button</button>
+      </div>
+    </section>
+
+    <!-- Cards -->
+    <section class="section">
+      <h2 class="section-title">🃏 Cards</h2>
+
+      <div class="demo-grid">
+        <div class="card">
+          <div class="card-header">Simple Card</div>
+          <div class="card-body">
+            <p>This is a basic card with a header and body.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Card with Footer</div>
+          <div class="card-body">
+            <p>Cards can have headers, body, and footers.</p>
+          </div>
+          <div class="card-footer">Card Footer</div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h3 style="margin-top: 0;">No Header Card</h3>
+            <p>This card has only a body section.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stat Cards -->
+    <section class="section">
+      <h2 class="section-title">📊 Stat Cards</h2>
+
+      <div class="demo-grid">
+        <div class="stat-card stat-primary">
+          <div class="stat-value">128</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+
+        <div class="stat-card stat-success">
+          <div class="stat-value">95.2%</div>
+          <div class="stat-label">Uptime</div>
+        </div>
+
+        <div class="stat-card stat-warning">
+          <div class="stat-value">42°C</div>
+          <div class="stat-label">Temperature</div>
+        </div>
+
+        <div class="stat-card stat-danger">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Alerts</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Forms -->
+    <section class="section">
+      <h2 class="section-title">📝 Form Elements</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Input Fields</div>
+        <div class="form-group">
+          <label>Text Input</label>
+          <input type="text" class="form-control" placeholder="Enter text...">
+        </div>
+        <div class="form-group">
+          <label>Number Input</label>
+          <input type="number" class="form-control" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Select</label>
+          <select class="form-control">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Textarea</label>
+          <textarea class="form-control" rows="3" placeholder="Enter message..."></textarea>
+        </div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Checkboxes & Radio</div>
+        <div class="form-check">
+          <input type="checkbox" id="check1" checked>
+          <label for="check1">Enable notifications</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="check2">
+          <label for="check2">Auto-refresh data</label>
+        </div>
+        <hr style="margin: 1rem 0;">
+        <div class="form-check">
+          <input type="radio" name="radio-demo" id="radio1" checked>
+          <label for="radio1">Option A</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="radio-demo" id="radio2">
+          <label for="radio2">Option B</label>
+        </div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Toggle Switches</div>
+        <div class="switch-group">
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+          <span>WiFi Enabled</span>
+        </div>
+        <div class="switch-group">
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+          <span>Dark Mode</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="section">
+      <h2 class="section-title">📈 Charts</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Line Chart</div>
+        <div id="line-chart" class="chart-container"></div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Bar Chart</div>
+        <div id="bar-chart" class="chart-container"></div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Sparklines</div>
+        <div class="demo-grid">
+          <div>
+            <p><strong>CPU Usage:</strong> <span id="sparkline-1" class="sparkline"></span></p>
+          </div>
+          <div>
+            <p><strong>Memory:</strong> <span id="sparkline-2" class="sparkline"></span></p>
+          </div>
+          <div>
+            <p><strong>Network:</strong> <span id="sparkline-3" class="sparkline"></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tables -->
+    <section class="section">
+      <h2 class="section-title">📋 Tables</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Static Table</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Sensor</th>
+              <th>Value</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Temperature</td>
+              <td>25.4°C</td>
+              <td><span class="badge badge-success">OK</span></td>
+            </tr>
+            <tr>
+              <td>Humidity</td>
+              <td>62%</td>
+              <td><span class="badge badge-success">OK</span></td>
+            </tr>
+            <tr>
+              <td>Pressure</td>
+              <td>1013 hPa</td>
+              <td><span class="badge badge-warning">Warning</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Sortable Dynamic Table</div>
+        <div id="dynamic-table"></div>
+      </div>
+    </section>
+
+    <!-- Gauges -->
+    <section class="section">
+      <h2 class="section-title">⏱️ Circular Gauges</h2>
+
+      <div class="component-demo">
+        <div class="gauge-row">
+          <div>
+            <div id="gauge-1" class="gauge"></div>
+            <p style="text-align: center; margin-top: 0.5rem;">CPU Usage</p>
+          </div>
+          <div>
+            <div id="gauge-2" class="gauge"></div>
+            <p style="text-align: center; margin-top: 0.5rem;">Memory</p>
+          </div>
+          <div>
+            <div id="gauge-3" class="gauge"></div>
+            <p style="text-align: center; margin-top: 0.5rem;">Disk Space</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Bars -->
+    <section class="section">
+      <h2 class="section-title">📊 Progress Bars</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Standard Progress Bars</div>
+        <div class="inline-demo">
+          <label>Primary (75%)</label>
+          <div class="progress">
+            <div class="progress-bar progress-primary" style="width: 75%"></div>
+          </div>
+        </div>
+        <div class="inline-demo">
+          <label>Success (100%)</label>
+          <div class="progress">
+            <div class="progress-bar progress-success" style="width: 100%"></div>
+          </div>
+        </div>
+        <div class="inline-demo">
+          <label>Warning (50%)</label>
+          <div class="progress">
+            <div class="progress-bar progress-warning" style="width: 50%"></div>
+          </div>
+        </div>
+        <div class="inline-demo">
+          <label>Danger (25%)</label>
+          <div class="progress">
+            <div class="progress-bar progress-danger" style="width: 25%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Animated Progress</div>
+        <div id="progress-1" class="progress">
+          <div class="progress-bar progress-primary"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section">
+      <h2 class="section-title">⏰ Timeline</h2>
+
+      <div class="component-demo">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-marker timeline-primary"></div>
+            <div class="timeline-content">
+              <h4>System Started</h4>
+              <p>ESP32 booted successfully</p>
+              <small>2 hours ago</small>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-marker timeline-success"></div>
+            <div class="timeline-content">
+              <h4>WiFi Connected</h4>
+              <p>Connected to network "HomeNet"</p>
+              <small>1 hour ago</small>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-marker timeline-warning"></div>
+            <div class="timeline-content">
+              <h4>High Temperature</h4>
+              <p>Temperature exceeded 30°C</p>
+              <small>30 minutes ago</small>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-marker timeline-info"></div>
+            <div class="timeline-content">
+              <h4>Data Sync</h4>
+              <p>Synchronized 256 records</p>
+              <small>5 minutes ago</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges & Labels -->
+    <section class="section">
+      <h2 class="section-title">🏷️ Badges</h2>
+
+      <div class="component-demo">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-primary">Primary</span>
+          <span class="badge badge-success">Success</span>
+          <span class="badge badge-warning">Warning</span>
+          <span class="badge badge-danger">Danger</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-dark">Dark</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading States -->
+    <section class="section">
+      <h2 class="section-title">⏳ Loading States</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Loading Spinner</div>
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading data...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Utility Classes -->
+    <section class="section">
+      <h2 class="section-title">🔧 Utility Classes</h2>
+
+      <div class="component-demo">
+        <div class="component-title">Text Alignment</div>
+        <p class="text-left">Left aligned text</p>
+        <p class="text-center">Center aligned text</p>
+        <p class="text-right">Right aligned text</p>
+      </div>
+
+      <div class="component-demo">
+        <div class="component-title">Margins</div>
+        <div style="background: var(--surface); padding: 0.5rem;">
+          <div class="mb-1" style="background: var(--primary); color: white; padding: 0.5rem;">mb-1 (margin-bottom: 0.5rem)</div>
+          <div class="mb-2" style="background: var(--success); color: white; padding: 0.5rem;">mb-2 (margin-bottom: 1rem)</div>
+          <div style="background: var(--info); color: white; padding: 0.5rem;">No margin</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 2rem; border-top: 1px solid var(--border); margin-top: 3rem;">
+      <p style="margin: 0; color: var(--text-light);">
+        <strong>NanoUI</strong> - Lightweight UI Framework for Microcontrollers<br>
+        Built for ESP32 & ESP8266 • Zero Dependencies • ~7-8KB Gzipped
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Initialize all components
+    document.addEventListener('DOMContentLoaded', function() {
+      // Line Chart
+      const lineData = [12, 19, 15, 25, 22, 30, 28, 35, 32, 38, 42, 39, 45, 48, 52, 49, 55, 58, 62, 65];
+      NanoUI.Chart.line('#line-chart', lineData, {
+        color: '#007bff',
+        showDots: true,
+        smooth: true
+      });
+
+      // Bar Chart
+      const barData = [45, 52, 38, 65, 49, 72, 55, 68, 58, 75];
+      NanoUI.Chart.bar('#bar-chart', barData, {
+        color: '#28a745'
+      });
+
+      // Sparklines
+      const spark1 = [30, 32, 35, 33, 38, 42, 45, 43, 48, 52];
+      const spark2 = [65, 62, 68, 70, 67, 72, 69, 75, 78, 74];
+      const spark3 = [20, 25, 22, 28, 32, 30, 35, 38, 42, 45];
+
+      NanoUI.Chart.sparkline('#sparkline-1', spark1, '#007bff');
+      NanoUI.Chart.sparkline('#sparkline-2', spark2, '#28a745');
+      NanoUI.Chart.sparkline('#sparkline-3', spark3, '#ffc107');
+
+      // Dynamic Table
+      const tableData = [
+        { id: 1, device: 'ESP32-01', status: 'Online', uptime: '12h 34m', temp: '42°C' },
+        { id: 2, device: 'ESP32-02', status: 'Online', uptime: '8h 12m', temp: '38°C' },
+        { id: 3, device: 'ESP32-03', status: 'Offline', uptime: '0h 0m', temp: 'N/A' },
+        { id: 4, device: 'ESP8266-01', status: 'Online', uptime: '24h 5m', temp: '45°C' },
+        { id: 5, device: 'ESP8266-02', status: 'Online', uptime: '16h 48m', temp: '41°C' }
+      ];
+
+      const columns = [
+        { key: 'device', label: 'Device', sortable: true },
+        { key: 'status', label: 'Status', sortable: true },
+        { key: 'uptime', label: 'Uptime', sortable: true },
+        { key: 'temp', label: 'Temperature', sortable: true }
+      ];
+
+      NanoUI.Table.create('#dynamic-table', tableData, columns);
+
+      // Gauges
+      NanoUI.Gauge.create('#gauge-1', 65, {
+        label: '65%',
+        color: '#007bff'
+      });
+
+      NanoUI.Gauge.create('#gauge-2', 82, {
+        label: '82%',
+        color: '#28a745'
+      });
+
+      NanoUI.Gauge.create('#gauge-3', 45, {
+        label: '45%',
+        color: '#ffc107'
+      });
+
+      // Animated Progress
+      NanoUI.Progress.animate('#progress-1', 85, 2000);
+
+      // Auto-refresh demo (update gauges every 3 seconds)
+      setInterval(function() {
+        const randomValue1 = Math.floor(Math.random() * 100);
+        const randomValue2 = Math.floor(Math.random() * 100);
+        const randomValue3 = Math.floor(Math.random() * 100);
+
+        NanoUI.Gauge.update('#gauge-1', randomValue1, randomValue1 + '%');
+        NanoUI.Gauge.update('#gauge-2', randomValue2, randomValue2 + '%');
+        NanoUI.Gauge.update('#gauge-3', randomValue3, randomValue3 + '%');
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

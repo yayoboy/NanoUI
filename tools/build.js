@@ -123,6 +123,8 @@ async function build(templateName = 'template.html', outputName = 'nanoui.html')
 const args = process.argv.slice(2);
 if (args.includes('--dashboard')) {
   build('dashboard-template.html', 'dashboard.html');
+} else if (args.includes('--showcase')) {
+  build('showcase-template.html', 'showcase.html');
 } else {
   build();
 }

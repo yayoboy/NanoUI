@@ -90,9 +90,30 @@ npm run build
 # Build dashboard template with charts
 npm run build:dashboard
 
-# Build both
+# Build component showcase (demo page)
+npm run build:showcase
+
+# Build all (basic + dashboard + showcase)
 npm run build:all
 ```
+
+## 🎨 Demo & Showcase
+
+Want to see all components in action? Open `dist/showcase.html` in your browser to explore:
+
+- **Complete Component Gallery**: All UI elements displayed with examples
+- **Interactive Demos**: Live charts, gauges, tables with real-time updates
+- **Color Palette**: Full theme color showcase
+- **Dark/Light Mode**: Toggle between themes
+- **Code Reference**: Visual examples of every component
+
+Perfect for:
+- 📖 Learning what components are available
+- 🎨 Designing your interface
+- 📸 Taking screenshots for documentation
+- 🔍 Testing responsive behavior
+
+Simply run `npm run build:showcase` and open `dist/showcase.html` in your web browser!
 
 ## 📖 Usage Examples
 
@@ -120,6 +141,7 @@ See the `examples/` directory for complete ESP32 projects:
 |-----------|--------------|----------|
 | **NanoUI Basic** | ~7KB | Essential UI + controls |
 | **NanoUI Dashboard** | ~8KB | Full charts & tables |
+| **NanoUI Showcase** | ~9.4KB | All components demo (for browsers, not ESP32) |
 | Bootstrap | ~25KB | Full framework |
 | Material UI | ~90KB | React-based |
 | Tailwind | ~10-50KB | Utility-first (varies) |

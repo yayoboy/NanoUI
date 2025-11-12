@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node tools/build.js",
     "build:dashboard": "node tools/build.js --dashboard",
-    "build:all": "node tools/build.js && node tools/build.js --dashboard",
+    "build:showcase": "node tools/build.js --showcase",
+    "build:all": "node tools/build.js && node tools/build.js --dashboard && node tools/build.js --showcase",
     "minify": "node tools/minify.js",
     "watch": "node tools/build.js --watch"
   },
