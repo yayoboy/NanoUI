@@ -12,6 +12,14 @@ A lightweight, modern UI framework designed specifically for microcontrollers li
 - **Mobile Responsive**: Works perfectly on all screen sizes
 - **Data Visualization**: Built-in charts, gauges, and tables
 
+## 📸 Screenshots
+
+### Charts Demo
+![Charts Test Demo](screenshots/charts-demo.png)
+
+### Tables & Gauges Demo
+![Tables & Gauges Demo](screenshots/tables-gauges-demo.png)
+
 ## 🎯 Why NanoUI?
 
 ESP32 and similar microcontrollers have limited memory (typically 520KB RAM, 4MB flash). Traditional UI frameworks like Bootstrap (>50KB) or Material UI are too heavy. NanoUI provides modern UI components in a fraction of the size.
